@@ -162,4 +162,5 @@ cython_debug/
 src/*.jpg
 src/*.jpeg
 src/*.webp
+src/*.txt
 conf.json
