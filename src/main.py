@@ -117,8 +117,9 @@ import os
 from PIL import Image
 import telegram
 import asyncio
+import time
 
-async def send_photo_to_telegram():
+async def send_la_verita():
     response = requests.get("https://giornali.it/quotidiani-nazionali/la-verita/prima-pagina/")
     with open("response.txt", "w") as f:
         f.write(response.text)
@@ -142,7 +143,111 @@ async def send_photo_to_telegram():
     bot = telegram.Bot(token=token)
     await bot.send_photo(chat_id=group_id, photo="prova.jpg")
 
+async def send_libero():
+    response = requests.get("https://giornali.it/quotidiani-nazionali/libero-quotidiano/prima-pagina/")
+    with open("response.txt", "w") as f:
+        f.write(response.text)
+    with open("response.txt", "r") as f:
+        file = f.readlines()
+    for line in file:
+        if 'title="Libero Quotidiano"' in line:
+            line = line.split(sep='"')
+            if line[1].endswith(".webp"):
+                image_filename = line[1].split(sep="/")[-1].split(sep=".")[0] + "-big.webp"
+                print(line[1])
+                image_url = "https://giornali.it" + line[1].split(sep=".")[0] + "-big" + ".webp"
+    os.system("wget " + image_url)
+    image = Image.open(image_filename).convert("RGB")
+    os.system("rm ./*.webp")
+    image.save("prova.jpg", "jpeg")
+    with open("../conf.json") as json_file:
+        data = json.load(json_file)
+        token = data["api-key"]
+        group_id = data["group-id"]
+    bot = telegram.Bot(token=token)
+    await bot.send_photo(chat_id=group_id, photo="prova.jpg")
+    
+async def send_il_fatto_quotidiano():
+    response = requests.get("https://giornali.it/quotidiani-nazionali/il-fatto-quotidiano/prima-pagina/")
+    with open("response.txt", "w") as f:
+        f.write(response.text)
+    with open("response.txt", "r") as f:
+        file = f.readlines()
+    for line in file:
+        if 'title="Il Fatto Quotidiano"' in line:
+            line = line.split(sep='"')
+            if line[1].endswith(".webp"):
+                image_filename = line[1].split(sep="/")[-1].split(sep=".")[0] + "-big.webp"
+                print(line[1])
+                image_url = "https://giornali.it" + line[1].split(sep=".")[0] + "-big" + ".webp"
+    os.system("wget " + image_url)
+    image = Image.open(image_filename).convert("RGB")
+    os.system("rm ./*.webp")
+    image.save("prova.jpg", "jpeg")
+    with open("../conf.json") as json_file:
+        data = json.load(json_file)
+        token = data["api-key"]
+        group_id = data["group-id"]
+    bot = telegram.Bot(token=token)
+    await bot.send_photo(chat_id=group_id, photo="prova.jpg")
+    
+async def send_repubblica():
+    response = requests.get("https://giornali.it/quotidiani-nazionali/la-repubblica/prima-pagina/")
+    with open("response.txt", "w") as f:
+        f.write(response.text)
+    with open("response.txt", "r") as f:
+        file = f.readlines()
+    for line in file:
+        if 'title="La Repubblica"' in line:
+            line = line.split(sep='"')
+            if line[1].endswith(".webp"):
+                image_filename = line[1].split(sep="/")[-1].split(sep=".")[0] + "-big.webp"
+                print(line[1])
+                image_url = "https://giornali.it" + line[1].split(sep=".")[0] + "-big" + ".webp"
+    os.system("wget " + image_url)
+    image = Image.open(image_filename).convert("RGB")
+    os.system("rm ./*.webp")
+    image.save("prova.jpg", "jpeg")
+    with open("../conf.json") as json_file:
+        data = json.load(json_file)
+        token = data["api-key"]
+        group_id = data["group-id"]
+    bot = telegram.Bot(token=token)
+    await bot.send_photo(chat_id=group_id, photo="prova.jpg")
+    
+async def send_corriere_della_sera():
+    response = requests.get("https://giornali.it/quotidiani-nazionali/corriere-della-sera/prima-pagina/")
+    with open("response.txt", "w") as f:
+        f.write(response.text)
+    with open("response.txt", "r") as f:
+        file = f.readlines()
+    for line in file:
+        if 'title="Corriere della Sera"' in line:
+            line = line.split(sep='"')
+            if line[1].endswith(".webp"):
+                image_filename = line[1].split(sep="/")[-1].split(sep=".")[0] + "-big.webp"
+                print(line[1])
+                image_url = "https://giornali.it" + line[1].split(sep=".")[0] + "-big" + ".webp"
+    os.system("wget " + image_url)
+    image = Image.open(image_filename).convert("RGB")
+    os.system("rm ./*.webp")
+    image.save("prova.jpg", "jpeg")
+    with open("../conf.json") as json_file:
+        data = json.load(json_file)
+        token = data["api-key"]
+        group_id = data["group-id"]
+    bot = telegram.Bot(token=token)
+    await bot.send_photo(chat_id=group_id, photo="prova.jpg")
+
 async def main():
-    await send_photo_to_telegram()
+    await send_la_verita()
+    time.sleep(60)
+    await send_libero()
+    time.sleep(60)
+    await send_il_fatto_quotidiano()
+    time.sleep(60)
+    await send_repubblica()
+    time.sleep(60)
+    await send_corriere_della_sera()
 
 asyncio.run(main())
